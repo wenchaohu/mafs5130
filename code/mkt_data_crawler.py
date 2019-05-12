@@ -45,7 +45,7 @@ if __name__ == '__main__':
     # save stock information
     stock_df = dual_tickers.join(stock_info.set_index('ts_code'), on='A_Ticker')
     stock_df.to_csv(os.path.join(data_dir, 'stock_info.csv'), index=False, encoding='utf_8_sig')
-    period = 1  # in integral year
+    period = 10  # in integral year
 
     for tickers in (list(dual_tickers['H_Ticker'].str.slice(start=1)), list(dual_tickers['A_Ticker'].str.replace('.SH', '.SS'))):
         for t in tickers:
@@ -69,6 +69,7 @@ if __name__ == '__main__':
     hkd_cny = hkd_usd.join(cny_usd)
     hkd_cny['HKDCNY'] = hkd_cny['DEXHKUS']/hkd_cny['DEXCHUS']
     hkd_cny = hkd_cny.drop(columns=['DEXHKUS', 'DEXCHUS']).reset_index()
+    hkd_cny = hkd_cny.rename(columns={'DATE': 'Date'})
     hkd_cny.to_csv(os.path.join(data_dir, 'HKDCNY.csv'), index=False)
     logger.info('Saved HKD/CNY rates.')
 
